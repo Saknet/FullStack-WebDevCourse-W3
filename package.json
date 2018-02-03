@@ -1,0 +1,27 @@
+{
+  "name": "fullstack-webdevcourse-w3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saknet/FullStack-WebDevCourse-W3.git"
+  },
+  "author": "Andreas Andra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Saknet/FullStack-WebDevCourse-W3/issues"
+  },
+  "homepage": "https://github.com/Saknet/FullStack-WebDevCourse-W3#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
+  }
+}
