@@ -1,10 +1,19 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(bodyParser.json())
 
-let persons = [
+morgan.token('body', function getBody (req) {
+  return req
+})
+
+app.use(morgan('tiny', function getBody (req) { 
+  return req }
+))
+
+const persons = [
   {
     name: "Arto Hellas",
     number: "040-123456",
@@ -31,7 +40,6 @@ let persons = [
     id: 5
   }
 ]
-
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
