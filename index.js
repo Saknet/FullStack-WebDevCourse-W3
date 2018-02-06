@@ -2,16 +2,14 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(bodyParser.json())
 
-morgan.token('body', function getBody (req) {
-  return req
-})
+morgan.token('type', function (req, res) { return JSON.stringify(req.body) })
 
-app.use(morgan('tiny', function getBody (req) { 
-  return req }
-))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'))
+app.use(cors())
 
 const persons = [
   {
@@ -103,7 +101,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-const PORT = 3001
+const PORT = process.env.Port || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
