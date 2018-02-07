@@ -104,8 +104,6 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       response.json(savedPerson)
     })
-
-  persons = persons.concat(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
