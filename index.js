@@ -57,7 +57,7 @@ app.get('/api/persons', (req, res) => {
       console.log(error)
     })
     .then(persons => {
-      response.json(persons.map(formatPerson))
+      response.json(persons)
     })
 })
 
@@ -68,17 +68,9 @@ app.get('/api/persons/:id', (request, response) => {
       console.log(error)
     })
     .then(person => {
-      response.json(formatPerson(person))
+      response.json(person)
     })
 })
-
-const formatPerson = (person) => {
-  const formattedPerson = { ...person._doc, id: person._id }
-  delete formattedPerson._id
-  delete formattedPerson.__v
-  
-  return formatPerson
-}
 
 const generateId = () => {
   return Math.floor(Math.random() * Math.floor(100000))
@@ -110,7 +102,7 @@ app.post('/api/persons', (request, response) => {
       console.log(error)
     })
     .then(savedPerson => {
-      response.json(formatPerson(savedPerson))
+      response.json(savedPerson)
     })
 
   persons = persons.concat(person)
