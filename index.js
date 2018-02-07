@@ -50,7 +50,7 @@ app.get('/info', (req, res) => {
             <p> ${date}<p>`)
 })
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (request, response) => {
   Person
     .find({})
     .catch(error => {
