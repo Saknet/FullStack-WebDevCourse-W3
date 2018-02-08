@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
-const url = 'mongodb://psion:jee@ds225308.mlab.com:25308/fullstackcourse-w3db'
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 mongoose.Promise = global.Promise

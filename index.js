@@ -45,9 +45,16 @@ app.get('/', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-  const date = new Date()
-  res.send(`<p>puhelinluettelossa ${persons.length} henkilön tiedot</p>
-            <p> ${date}<p>`)
+  Person
+  .find({})
+  .then(persons => {
+    const date = new Date()
+    res.send(`<p>puhelinluettelossa ${persons.length} henkilön tiedot</p>
+              <p> ${date}<p>`)
+  })
+  .catch(error => {
+    console.log(error)
+  })
 })
 
 app.get('/api/persons', (request, response) => {
@@ -82,6 +89,7 @@ const generateId = () => {
 }
 
 app.post('/api/persons', (request, response) => {
+  console.log(request.body)
   const body = request.body
 
   if (body.name === undefined) {
