@@ -65,10 +65,15 @@ app.get('/api/persons/:id', (request, response) => {
   Person
     .findById(request.params.id)
     .then(person => {
-      response.json(person)
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
     })
     .catch(error => {
       console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
     })
 })
 
@@ -96,14 +101,28 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
   })
 
-  person
-    .save()
-    .then(savedPerson => {
-      response.json(savedPerson)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  const nameToBeAdded = body.name
+
+  Person
+  .find({name: nameToBeAdded})
+  .then(result => {
+    if (result) {
+      return response.status(400).json({error: `${nameToBeAdded} is already included!`})
+    } else {
+      const person = new Person({
+        name: body.name,
+        number: body.number,
+      })
+      person
+      .save()
+      .then(savedPerson => {
+        response.json(savedPerson)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -128,7 +147,7 @@ app.put('/api/persons/:id', (request, response) => {
   Person
     .findByIdAndUpdate(request.params.id, person, { new: true } )
     .then(updatedPerson => {
-      response.json(formatNote(updatedPerson))
+      response.json(updatedPerson)
     })
     .catch(error => {
       console.log(error)
