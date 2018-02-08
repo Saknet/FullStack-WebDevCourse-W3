@@ -53,22 +53,22 @@ app.get('/info', (req, res) => {
 app.get('/api/persons', (request, response) => {
   Person
     .find({})
-    .catch(error => {
-      console.log(error)
-    })
     .then(persons => {
       response.json(persons)
+    })
+    .catch(error => {
+      console.log(error)
     })
 })
 
 app.get('/api/persons/:id', (request, response) => {
   Person
     .findById(request.params.id)
-    .catch(error => {
-      console.log(error)
-    })
     .then(person => {
       response.json(person)
+    })
+    .catch(error => {
+      console.log(error)
     })
 })
 
@@ -98,11 +98,11 @@ app.post('/api/persons', (request, response) => {
 
   person
     .save()
-    .catch(error => {
-      console.log(error)
-    })
     .then(savedPerson => {
       response.json(savedPerson)
+    })
+    .catch(error => {
+      console.log(error)
     })
 })
 
@@ -113,8 +113,27 @@ app.delete('/api/persons/:id', (request, response) => {
       response.status(204).end()
     })
     .catch(error => {
-      reponse.status(400).send({ error: 'malformatted id'})
+      response.status(400).send({ error: 'malformatted id'})
     })    
+})
+
+app.put('/api/persons/:id', (request, response) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person
+    .findByIdAndUpdate(request.params.id, person, { new: true } )
+    .then(updatedPerson => {
+      response.json(formatNote(updatedPerson))
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
+    })
 })
 
 const PORT = process.env.PORT || 3001
