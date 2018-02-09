@@ -5,7 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
 
-morgan.token('type', function (req, res) { return JSON.stringify(req.body)})
+morgan.token('type', function (req) { return JSON.stringify(req.body)})
 
 app.use(express.static('build'))
 app.use(bodyParser.json())
@@ -14,28 +14,28 @@ app.use(morgan(':method :url :type :status :res[content-length] - :response-time
 
 let persons = [
   {
-    name: "Arto Hellas",
-    number: "040-123456",
+    name: 'Arto Hellas',
+    number: '040-123456',
     id: 1
   },
   {
-    name: "Martti Tienari",
-    number: "040-123456",
+    name: 'Martti Tienari',
+    number: '040-123456',
     id: 2
   },
   {
-    name: "Arto Järvinen",
-    number: "040-123456",
+    name: 'Arto Järvinen',
+    number: '040-123456',
     id: 3
   },
   {
-    name: "Lea Kutvonen",
-    number: "040-123456",
+    name: 'Lea Kutvonen',
+    number: '040-123456',
     id: 4
   },
   {
-    name: "Testi",
-    number: "040-123456",
+    name: 'Testi',
+    number: '040-123456',
     id: 5
   }
 ]
@@ -46,15 +46,15 @@ app.get('/', (req, res) => {
 
 app.get('/info', (req, res) => {
   Person
-  .find({})
-  .then(persons => {
-    const date = new Date()
-    res.send(`<p>puhelinluettelossa ${persons.length} henkilön tiedot</p>
+    .find({})
+    .then(persons => {
+      const date = new Date()
+      res.send(`<p>puhelinluettelossa ${persons.length} henkilön tiedot</p>
               <p> ${date}<p>`)
-  })
-  .catch(error => {
-    console.log(error)
-  })
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.get('/api/persons', (request, response) => {
@@ -89,7 +89,6 @@ const generateId = () => {
 }
 
 app.post('/api/persons', (request, response) => {
-  console.log(request.body)
   const body = request.body
 
   if (body.name === undefined) {
@@ -100,37 +99,33 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({ error: 'number missing' })
   }
 
-//  if (persons.find(person => person.name === body.name)) {
-//    return response.status(400).json({ error: 'name must be unique'})
-//  }
+  //  if (persons.find(person => person.name === body.name)) {
+  //    return response.status(400).json({ error: 'name must be unique'})
+  //  }
 
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  })
 
   const nameToBeAdded = body.name
 
   Person
-  .find({name: nameToBeAdded})
-  .then(result => {
-    if (result) {
-      return response.status(400).json({error: `${nameToBeAdded} is already included!`})
-    } else {
-      const person = new Person({
-        name: body.name,
-        number: body.number,
-      })
-      person
-      .save()
-      .then(savedPerson => {
-        response.json(savedPerson)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    }
-  })
+    .find({ name: nameToBeAdded })
+    .then(result => {
+      if (result) {
+        return response.status(400).json({error: `${nameToBeAdded} is already included!`})
+      } else {
+        const person = new Person({
+          name: body.name,
+          number: body.number,
+        })
+        person
+          .save()
+          .then(savedPerson => {
+            response.json(savedPerson)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -141,7 +136,7 @@ app.delete('/api/persons/:id', (request, response) => {
     })
     .catch(error => {
       response.status(400).send({ error: 'malformatted id'})
-    })    
+    })
 })
 
 app.put('/api/persons/:id', (request, response) => {
