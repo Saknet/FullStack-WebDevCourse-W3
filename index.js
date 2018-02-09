@@ -103,14 +103,13 @@ app.post('/api/persons', (request, response) => {
   //    return response.status(400).json({ error: 'name must be unique'})
   //  }
 
-
   const nameToBeAdded = body.name
 
   Person
     .find({ name: nameToBeAdded })
     .then(result => {
-      if (result) {
-        return response.status(400).json({error: `${nameToBeAdded} is already included!`})
+      if (result && result.length) {
+        response.status(400).json({error: `${nameToBeAdded} is already included!`})
       } else {
         const person = new Person({
           name: body.name,
